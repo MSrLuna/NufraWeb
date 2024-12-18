@@ -1,0 +1,33 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+<div class="container mt-5" style="background-color: #4A4063; color: white;">
+    <h2>Recepción de Pedidos</h2>
+    <a href="{% url 'superHome' %}" class="btn btn-custom">Volver</a>
+
+
+    <div class="row">
+        {% for pedido in pedidos %}
+
+        <div class="col-md-4">
+            <a href="{% url 'detallePedido' pedido.nro_pedido %}" class="text-decoration-none">
+                <div class="card mb-4" >
+                    <div class="card-header text-center"style="background-color: #5a4e6f; color: #ffffff;">
+                        <h5>Pedido #{{ pedido.nro_pedido }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Proveedor:</strong> {{ pedido.proveedor.nombre }}</p>
+                        <p><strong>Fecha:</strong> {{ pedido.fecha }}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p class="text-center">No hay pedidos pendientes.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+

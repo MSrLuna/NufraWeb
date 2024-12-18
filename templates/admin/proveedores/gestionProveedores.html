@@ -1,0 +1,66 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+<div class="container"style="background-color: #4A4063; color: white; margin-top: 55px;">
+    <div class="row">
+        <!-- Formulario para editar o crear proveedores -->
+        <div class="col-md-4">
+            <h3>{% if proveedor %}Editar Proveedor{% else %}Crear Proveedor{% endif %}</h3>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-custom w-100 ">
+                    {% if proveedor %}Guardar Cambios{% else %}Crear Proveedor{% endif %}
+                </button>
+                <a href="{% url 'adminHome' %}" class="btn btn-custom w-100 mt-2">Volver</a>
+            </form>
+        </div>
+
+        <!-- Tabla de proveedores existentes -->
+        <div class="col-md-8">
+            <h3>Lista de Proveedores</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for proveedor in proveedores %}
+                    <tr>
+                        <td>{{ proveedor.nombre }}</td>
+                        <td>{{ proveedor.correo }}</td>
+                        <td>{{ proveedor.telefono }}</td>
+                        <td>
+                            {% if proveedor.disponible %}
+                                Activo
+                            {% else %}
+                                Inactivo
+                            {% endif %}
+                        </td>
+                        <td>
+                            <!-- Botones para editar y deshabilitar -->
+                            <a href="{% url 'editarProveedor' proveedor.id %}" class="btn btn-custom btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                            {% if proveedor.disponible %}
+                            <a href="{% url 'deshabilitarProveedor' proveedor.id %}" class="btn btn-deshabilitar btn-sm"><i class="fa-solid fa-ban"></i></a>
+                            {% else %}
+                            <a href="{% url 'deshabilitarProveedor' proveedor.id %}" class="btn btn-habilitar btn-sm"><i class="fa-solid fa-check"></i></a>
+                            {% endif %}
+                            <a href="{% url 'crearPedido' proveedor.id %}" class="btn-custom">Crear Pedido</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">No hay proveedores registrados.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

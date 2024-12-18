@@ -1,0 +1,67 @@
+{% extends 'shared/base.html' %}
+{% block content %}
+<div class="container mt-5" style="width: 100%; max-width: auto; background-color: #4A4063;">
+    <!-- style="width: 100%; max-width: 400px; background-color: #4A4063;" -->
+    <!-- Buscador -->
+    <a href="{% url 'adminHome' %}" class="btn btn-custom w-10 mt-2">Volver</a>
+    <div class="row d-flex mb-4">
+        <form method="get" class="my-3">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="Buscar categoria por nombre" value="{{ query }}">
+                <button type="submit" class="btn btn-custom">Buscar</button>
+                <a href="{% url "register" %}" class="btn btn-custom ms-1">Ir a Registro</a>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Tabla de Usuarios -->
+    <div class="d-flex table table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Rut</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Correo</th>
+                    <th>Username</th>
+                    <th>Telefono</th>
+                    <th>Rol</th>
+                    <th>Jefatura</th>
+                    <!-- <th>Disponible</th> -->
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in empleados %}
+                    <tr>
+                        <td>{{ i.rut_empleado }}</td>
+                        <td>{{ i.nombre }}</td>
+                        <td>{{ i.apellido }}</td>
+                        <td>{{ i.correo }}</td>
+                        <td>{{ i.username }}</td>
+                        <td>{{ i.telefono }}</td>
+                        <td>{{ i.rol }}</td>
+                        <td>{% if i.jefatura != None %}{{ i.jefatura }}{% else %}N/a{% endif %}</td>
+                        <!-- <td> {{ i.disponible }} </td> -->
+                        <td>
+                            <a href="{% url 'editPersonal' i.rut_empleado %}" class="btn btn-custom">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                            {% comment %} 
+                            <a href="#" class="btn btn-deshabilitar">
+                                <i class="fa-solid fa-ban"></i>
+                            </a> 
+                            {% endcomment %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="10" class="text-center">No hay personal.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

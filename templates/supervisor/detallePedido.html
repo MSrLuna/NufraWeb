@@ -1,0 +1,77 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+<div class="container mt-5" style="background-color: #4A4063; color: white;">
+    <h2>Detalle del Pedido #{{ pedido.nro_pedido }}</h2>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="col-12">
+                <p><strong>Proveedor:</strong> {{ pedido.proveedor.nombre }}</p>
+                <p><strong>Fecha:</strong> {{ pedido.fecha }}</p>
+                <p><strong>Total:</strong> ${{ pedido.total_pedido }}</p>
+            </div>
+
+            <div class="col-12 mt-4">
+                <div class="d-flex justify-content-between">
+                    <form method="POST" action="{% url 'confirmarRecepcionPedido' pedido.nro_pedido %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-custom">Confirmar Recepción</button>
+                    </form>
+            
+                    {% if request.session.rol_id == "1" %}
+                        <a href="#" class="btn btn-deshabilitar" onclick="confirmarCancelacion({{ pedido.nro_pedido }})">Cancelar Pedido</a>
+                    {% endif %}
+                </div>
+                <a href="{% url 'recepcionPedido' %}" class="btn btn-custom">Volver</a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="col-12 mt-4">
+                <h4>Detalles del Pedido</h4>
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for detalle in detalles %}
+                        <tr>
+                            <td>{{ detalle.producto.codigo }}</td>
+                            <td>{{ detalle.producto.nombre }}</td>
+                            <td>
+                                <form method="POST" action="{% url 'editarCantidadDetalle' detalle.id %}" class="d-flex align-items-center">
+                                    {% csrf_token %}
+                                    <input type="number" name="cantidad" value="{{ detalle.cantidad }}" min="0" required class="form-control mr-2" style="width: 100px;">
+                                    <button type="submit" class="btn btn-custom">Editar cantidad</button>
+                                </form>
+                            </td>
+                            
+
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center">No hay detalles para mostrar.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script para la confirmación de cancelación -->
+<script>
+    function confirmarCancelacion(nro_pedido) {
+        const confirmacion = confirm("¿Esta seguro de que desea cancelar este pedido?");
+        if (confirmacion) {
+            window.location.href = "{% url 'cancelarPedido' 0 %}".replace("0", nro_pedido);
+        }
+    }
+</script>
+
+{% endblock %}

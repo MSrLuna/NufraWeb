@@ -1,0 +1,90 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+<div class="container" style="background-color: #4A4063; color: white; margin-top: 55px; padding: 20px;">
+    <div class="row">
+        <!-- Columna izquierda: Formularios e Inputs -->
+        <div class="col-lg-4 mb-4">
+            <!-- Formulario de Crear/Editar Categoría -->
+            <div class="card" >
+                <div class="card-header text-center"style="background-color: #4A4063; color: white;">
+                    <h5 class="mb-0">
+                        {% if categoria %}Editar Categoría{% else %}Crear Categoría{% endif %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-custom w-100">
+                            {% if categoria %}Actualizar Categoría{% else %}Guardar Categoría{% endif %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Buscador de categorías -->
+            <div class="card mt-4" >
+                <div class="card-header text-center"style="background-color: #4A4063; color: white;">
+                    <h5>Buscar Categorías</h5>
+                </div>
+                <div class="card-body">
+                    <form method="get" class="my-3">
+                        <div class="input-group">
+                            <input type="text" name="search" class="form-control" placeholder="Buscar categoría por nombre" value="{{ query }}">
+                            <button type="submit" class="btn btn-custom">Buscar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <a href="{% url 'adminHome' %}" class="btn btn-custom w-100 mt-2">Volver</a>
+        </div>
+
+        <!-- Columna derecha: Tabla de Categorías -->
+        <div class="col-lg-8">
+            <div class="card" >
+                <div class="card-header text-center">
+                    <h5>Lista de Categorías</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-striped" style="color: white;">
+                        <thead>
+                            <tr>
+                                <th>Nombre de la Categoría</th>
+                                <th>Disponibilidad</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for categoria in categorias %}
+                                <tr>
+                                    <td>{{ categoria.nombre }}</td>
+                                    <td>
+                                        {% if categoria.disponible %}
+                                            Disponible
+                                        {% else %}
+                                            No Disponible
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'editarCategoria' categoria.id %}" class="btn btn-custom btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                        {% if categoria.disponible %}
+                                            <a href="{% url 'deshabilitarCategoria' categoria.id %}" class="btn btn-deshabilitar btn-sm"><i class="fa-solid fa-ban"></i></a>
+                                        {% else %}
+                                            <a href="{% url 'deshabilitarCategoria' categoria.id %}" class="btn btn-habilitar btn-sm"><i class="fa-solid fa-check"></i></a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center">No hay categorías creadas aún.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

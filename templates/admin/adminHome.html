@@ -1,0 +1,64 @@
+{% extends 'shared/base.html' %}
+{% block content %}
+<body>
+    <div class="container mt-4">
+        <div class="row mt-5">
+            <div class="col-md-4 mb-4">
+                <div class="card text-center shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">Productos</h5>
+                        <p class="card-text">Gestion de productos.</p>
+                        <a href="{% url "productos" %}" class="btn btn-custom">Ir a Productos</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card text-center shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">Categorias</h5>
+                        <p class="card-text">Gestion de categorias de productos.</p>
+                        <a href="{% url "categorias" %}" class="btn btn-custom">Ir a Categorias</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card text-center shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">Proveedores</h5>
+                        <p class="card-text">Gestion de Proveedores.</p>
+                        <a href="{% url "proveedores" %}" class="btn btn-custom">Ir a Proveedores</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card text-center shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">Personal</h5>
+                        <p class="card-text">Gestion de personal.</p>
+                        <a href="{% url "personal" %}" class="btn btn-custom">Ir a Personal</a>
+                    </div>
+                </div>
+            </div>            
+            <div class="col-md-4 mb-4">
+                <div class="card text-center shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">Reportes</h5>
+                        <p class="card-text">Reportes varios.</p>
+                        <a href="{% url "reportes" %}" class="btn btn-custom">Ir a Reportes Ventas</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card text-center shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">Catálogo</h5>
+                        <p class="card-text">Ver el catálogo.</p>
+                        <a href="{% url "catalogo" %}" class="btn btn-custom">Ir a Catálogo</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}

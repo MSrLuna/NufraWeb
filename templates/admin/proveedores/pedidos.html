@@ -1,0 +1,54 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+<div class="container mt-5"style="background-color: #4A4063; color: white;">
+    <h2>Agregar Producto</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Agregar Producto</button>
+    </form>
+
+    <h3 class="mt-4">Productos en el Pedido</h3>
+    <form method="POST" action="{% url 'confirmarPedido' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Confirmar Pedido</button>
+    </form>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Precio Unitario</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th>Acción</th>  <!-- Nueva columna para eliminar -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in request.session.pedido %}
+            <tr>
+                <td>{{ item.codigo }}</td>
+                <td>{{ item.nombre }}</td>
+                <td>{{ item.precio_unitario }}</td>
+                <td>{{ item.cantidad }}</td>
+                <td>{{ item.subtotal }}</td>
+                <td>
+                    <!-- Botón de eliminar -->
+                    <form method="POST" action="{% url 'eliminarProductoPedido' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="codigo" value="{{ item.codigo }}">
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">No hay productos en el pedido.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class= "btn btn-primary">Crear Producto</button>
+    <a href="{% url "gestionTienda" %}" class="btn btn-primary">Volver</a>
+</form>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+<div class="container mt-5" style="background-color: #4A4063; color: white;">
+    <div class="row justify-content-between">
+        <!-- Hacemos el formulario un poco más delgado, cambiamos col-md-5 por col-md-4 -->
+        <div class="col-md-4">
+            <div class="card shadow-sm" style="background-color: #4A4063; color: white; padding: 20px;">
+                <div class="card-header text-center">
+                    <h4 class="mb-0">
+                        {% if producto %}Editar Producto{% else %}Crear Producto{% endif %}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">  <!-- Agregar enctype aquí -->
+                        {% csrf_token %}                    
+                        <div class="mb-3 text-white">
+                            {{ form.as_p }}
+                        </div>
+                        <button type="submit" class="btn btn-custom w-100 mb-3">
+                            {% if producto %}Guardar Cambios{% else %}Crear Producto{% endif %}
+                        </button>
+                    </form>                                    
+                    <a href="{% url 'adminHome' %}" class="btn btn-outline-light w-100">Volver</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aquí mantenemos el tamaño de la tabla, pero puedes ajustar col-md-7 si es necesario -->
+        <div class="col-md-8">
+            <div class="mt-4">
+                <form method="get" class="my-3">
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            name="search" 
+                            class="form-control" 
+                            placeholder="Buscar producto por nombre" 
+                            value="{{ query }}">
+                        <button type="submit" class="btn btn-custom">Buscar</button>
+                    </div>
+                </form>
+            </div>
+            <div class="table-responsive mt-3">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>Proveedor</th>
+                            <th>P.Venta</th>
+                            <th>P.Compra</th>
+                            <th>Stock</th>
+                            <th>Disp</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for producto in productos %}
+                            <tr>
+                                <td>{{ producto.codigo }}</td>
+                                <td>{{ producto.nombre }}</td>
+                                <td>{{ producto.categoria.nombre }}</td>
+                                <td>{{ producto.proveedor.nombre }}</td>
+                                <td>${{ producto.precio_venta }}</td>
+                                <td>${{ producto.precio_compra }}</td>
+                                <td>{{ producto.stock }}</td>
+                                <td>
+                                    {% if producto.disponible %}
+                                        Si
+                                    {% else %}
+                                        No
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'editarProducto' producto.codigo %}" class="btn btn-custom btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    {% if producto.disponible %}
+                                    <a href="{% url 'deshabilitarProducto' producto.codigo %}" class="btn btn-deshabilitar btn-sm"><i class="fa-solid fa-ban"></i></a>
+                                    {% else %}
+                                    <a href="{% url 'deshabilitarProducto' producto.codigo %}" class="btn btn-habilitar btn-sm"><i class="fa-solid fa-check"></i></a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="9" class="text-center">No se encontraron productos.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>            
+        </div>
+    </div>
+</div>
+{% endblock %}

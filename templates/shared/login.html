@@ -1,0 +1,28 @@
+{% extends 'shared/base.html' %}
+
+{% block navbar %}
+<!-- No mostrar el navbar en esta página -->
+{% endblock %}
+{% load static %}
+{% block content %}
+<a href="{% url 'home' %}" class="navbar-brand text-white position-absolute" style="top: 10px; left: 10px;">
+    <img src="{% static 'images/Logo.png' %}" alt="Logo" class="img-fluid" style="max-height: 100px;" />
+</a>
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh; padding-top: 10%; padding-bottom: 25%; background-color: transparent;">
+    <div class="card p-4 shadow-sm" style="width: 100%; max-width: 400px; background-color: #4A4063;">
+        <h3 class="text-center mb-4 text-white">Ingreso</h3>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3" style= "color: white;">
+            {{ form.username.label_tag }}  
+            {{ form.username }}
+        </div>
+            <div class="mb-3"style= "color: white;">
+                {{ form.password.label_tag }}
+                {{ form.password }}
+            </div>
+            <button type="submit" class="btn btn-custom w-100">Ingresar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

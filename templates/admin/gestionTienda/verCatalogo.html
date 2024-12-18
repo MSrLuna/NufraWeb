@@ -1,0 +1,67 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+<div class="container mt-5" style="background-color: #4A4063; color: white;">
+    <h2 class="text-center mb-4">Catálogo de Productos</h2>
+
+    <!-- Buscador y filtros -->
+    <div class="row">
+        <div class="col-md-12">
+            <form method="get" class="my-3">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        name="search" 
+                        class="form-control" 
+                        placeholder="Buscar producto por nombre" 
+                        value="{{ query }}">
+                    <button type="submit" class="btn btn-custom">Buscar</button>
+                </div>
+                <div class="d-flex justify-content-between mt-3">
+                    <select name="categoria" class="form-control w-48">
+                        <option value="">Filtrar por categoría</option>
+                        {% for categoria in categorias %}
+                            <option value="{{ categoria.id }}" {% if categoria.id == categoria_id %}selected{% endif %}>{{ categoria.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="proveedor" class="form-control w-48">
+                        <option value="">Filtrar por proveedor</option>
+                        {% for proveedor in proveedores %}
+                            <option value="{{ proveedor.id }}" {% if proveedor.id == proveedor_id %}selected{% endif %}>{{ proveedor.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Lista de productos -->
+    <div class="row">
+        {% for producto in productos %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm" style="background-color: rgb(170, 120, 190) !important; color: white;">
+                    {% if producto.imagen %}
+                        <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}" style="height: 200px; object-fit: cover;">
+                    {% endif %}                
+                    <div class="card-body">
+                        <h5 class="card-title">{{ producto.nombre }}</h5>
+                        <p class="card-text">
+                            <strong>Codigo:</strong> {{ producto.codigo }}<br>
+                            <strong>Precio:</strong> ${{ producto.precio_venta }}<br>
+                            <strong>Stock:</strong> {{ producto.stock }}
+                        </p>
+                        <p>
+                            <strong>Categoría:</strong> {{ producto.categoria.nombre }}<br>
+                            <strong>Proveedor:</strong> {{ producto.proveedor.nombre }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-md-12">
+                <p class="text-center">No se encontraron productos disponibles.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
